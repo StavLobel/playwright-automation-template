@@ -1,0 +1,130 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "playwright-automation-template"
+version = "1.0.0"
+description = "A comprehensive template for UI and API automation using Playwright and Pytest"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pytest>=7.4.0",
+    "pytest-playwright>=0.4.0",
+    "playwright>=1.37.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+    "types-pyyaml>=6.0.0",
+    "pydantic-settings>=2.0.0",
+    "python-json-logger>=2.0.0",
+    "pytest-html>=3.2.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+pythonpath = ["src"]
+markers = [
+    "ui: UI tests using Playwright browser automation",
+    "api: API tests using Playwright's APIRequestContext",
+    "smoke: Quick smoke tests for core functionality",
+    "regression: Full regression test suite",
+    "slow: Tests that take longer to execute",
+]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "-v",
+    "--tb=short",
+]
+minversion = "7.0"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.5.0",
+    "black>=23.7.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "pre-commit>=3.3.0",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.mypy_cache
+  | \.pytest_cache
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["src", "tests"]
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = [
+    "E203",  # whitespace before ':'
+    "W503",  # line break before binary operator
+    "E501",  # line too long (handled by black)
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    "venv",
+    ".venv",
+    "build",
+    "dist",
+]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = false
+disallow_untyped_decorators = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pytest_playwright.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pytest",
+    "playwright.*",
+    "yaml",
+]
+ignore_missing_imports = true

@@ -1,0 +1,13 @@
+---
+description: >
+  CI and CD integration and pre-commit rules.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# CI and CD
+- GitHub Actions runs linting, typing, and tests on all pushes and PRs.
+- Pre-commit hooks include black with line length 88, isort, flake8, mypy, and YAML validation.
+- Run tests in parallel when safe.
+- Clean up resources such as browser contexts, API sessions, and temp files via fixtures.
